@@ -25,8 +25,27 @@
 </template>
 
 <script>
+import { mapFields } from "@/helpers.js";
+
 export default {
-  name: "UsuarioForm"
+  name: "UsuarioForm",
+  computed: {
+    ...mapFields({
+      fields: [
+        "nome",
+        "email",
+        "senha",
+        "cep",
+        "rua",
+        "numero",
+        "bairro",
+        "cidade",
+        "estado"
+      ],
+      base: "usuario",
+      mutation: "UPDATE_USUARIO"
+    })
+  }
 };
 </script>
 
@@ -38,7 +57,7 @@ form {
 }
 
 .button {
-    grid-column: 2;
-    margin-top: 10px;
+  grid-column: 2;
+  margin-top: 10px;
 }
 </style>
