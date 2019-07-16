@@ -54,7 +54,8 @@ export default {
   }
 }
 
-.sidenav a, .sidenav button {
+.sidenav a,
+.sidenav button {
   padding: 10px;
   display: block;
   background: #f4f7fc;
@@ -62,7 +63,9 @@ export default {
   border-radius: 4px;
 }
 
-.sidenav a.router-link-exact-active, .sidenav a:hover, .sidenav button:hover {
+.sidenav a.router-link-exact-active,
+.sidenav a:hover,
+.sidenav button:hover {
   background: #87f;
   color: #fff;
 }
