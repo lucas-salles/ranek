@@ -6,7 +6,7 @@ Um site de compra e venda de produtos.
 
 ## Tecnologia Utilizada
 
-O projeto foi implementado usando o framework [Vue.js](https://vuejs.org/index.html) [Laravel](https://laravel.com/).
+O projeto foi implementado usando o framework [Vue.js](https://vuejs.org/index.html).
 
 ## Back-end
 
