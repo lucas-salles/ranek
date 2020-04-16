@@ -15,7 +15,12 @@ export default {
   },
   methods: {
     buscarProdutos() {
-      this.$router.push({ query: { q: this.busca } });
+      // this.$router.push({ query: { q: this.busca } });
+      if (this.busca) {
+        this.$router.push({
+          query: { conditions: `nome:ilike:%${this.busca}%` }
+        });
+      }
     }
   }
 };
@@ -26,6 +31,7 @@ form {
   max-width: 600px;
   margin: 30px auto 60px auto;
   position: relative;
+  padding: 0 10px;
 }
 
 #busca {

@@ -2,15 +2,16 @@
   <section>
     <div v-if="compras">
       <h2>Compras</h2>
-      <div class="produtos-wrapper" v-for="(compra, index) in compras" :key="index">
-        <ProdutoItem v-if="compra.produto" :produto="compra.produto">
+      <div class="produtos-wrapper" v-for="compra in compras" :key="compra.id">
+        <ProdutoItem v-if="compra.product" :produto="compra.product">
           <p class="vendedor">
             <span>Vendedor:</span>
-            {{compra.vendedor_id}}
+            {{compra.vendedor.email}}
           </p>
         </ProdutoItem>
       </div>
     </div>
+    <PaginaCarregando v-else />
   </section>
 </template>
 
@@ -34,19 +35,20 @@ export default {
   },
   methods: {
     getCompras() {
-      api.get(`/transacao?comprador_id=${this.usuario.id}`).then(response => {
-        this.compras = response.data
-      })
+      api.get(`/transactions?tipo=comprador`).then(response => {
+        this.compras = response.data.data.data;
+      });
     }
   },
   watch: {
     login() {
-      this.getCompras()
+      this.getCompras();
     }
   },
   created() {
-    if(this.login)
-      this.getCompras()
+    if (this.login) this.getCompras();
+
+    document.title = "Usuário | Compras";
   }
 };
 </script>

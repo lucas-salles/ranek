@@ -5,8 +5,9 @@
       <label for="email">Email</label>
       <input type="email" name="email" id="email" v-model="login.email" />
       <label for="senha">Senha</label>
-      <input type="password" name="senha" id="senha" v-model="login.senha" />
+      <input type="password" name="senha" id="senha" v-model="login.password" />
       <button class="btn" @click.prevent="logar">Logar</button>
+      <ErroNotificacao :erros="erros" />
     </form>
     <p class="perdeu">
       <a href="/" target="_blank">Perdeu a senha? Clique aqui.</a>
@@ -27,15 +28,40 @@ export default {
     return {
       login: {
         email: "",
-        senha: ""
-      }
+        password: ""
+      },
+      erros: []
     };
   },
   methods: {
     logar() {
-      this.$store.dispatch("getUsuario", this.login.email);
-      this.$router.push({ name: "usuario" });
+      if (this.checkForm()) {
+        this.erros = [];
+        this.$store
+          .dispatch("logarUsuario", this.login)
+          .then(() => {
+            this.$store.dispatch("getUsuario");
+            this.$router.push({ name: "usuario" });
+          })
+          .catch(error => {
+            this.erros.push(error.response.data.error);
+          });
+      }
+    },
+    checkForm() {
+      if (this.login.email && this.login.password) {
+        return true;
+      }
+
+      this.erros = [];
+
+      for (const field of Object.entries(this.login)) {
+        if (!field[1]) this.erros.push(`O campo ${field[0]} é obrigatório.`);
+      }
     }
+  },
+  created() {
+    document.title = "Login";
   }
 };
 </script>

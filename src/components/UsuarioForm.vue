@@ -6,7 +6,7 @@
       <label for="email">Email</label>
       <input type="email" name="email" id="email" v-model="email" />
       <label for="senha">Senha</label>
-      <input type="password" name="senha" id="senha" v-model="senha" />
+      <input type="password" name="senha" id="senha" v-model="password" />
     </div>
     <label for="cep">Cep</label>
     <input type="text" name="cep" id="cep" v-model="cep" @keyup="preencherCep" />
@@ -37,7 +37,7 @@ export default {
       fields: [
         "nome",
         "email",
-        "senha",
+        "password",
         "cep",
         "rua",
         "numero",
@@ -69,7 +69,8 @@ export default {
 </script>
 
 <style scoped>
-form, .usuario {
+form,
+.usuario {
   display: grid;
   grid-template-columns: 80px 1fr;
   align-items: center;

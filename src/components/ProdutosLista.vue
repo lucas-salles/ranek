@@ -2,9 +2,13 @@
   <section class="produtos-container">
     <transition mode="out-in">
       <div v-if="produtos && produtos.length" class="produtos" key="produtos">
-        <div class="produto" v-for="(produto, index) in produtos" :key="index">
+        <div class="produto" v-for="produto in produtos" :key="produto.id">
           <router-link :to="{name: 'produto', params: {id: produto.id}}">
-            <img v-if="produto.fotos" :src="produto.fotos[0].src" :alt="produto.fotos[0].titulo" />
+            <img
+              v-if="produto.photos.length"
+              :src="produto.photos[0].src"
+              :alt="produto.photos[0].titulo"
+            />
             <p class="preco">{{produto.preco | numeroPreco}}</p>
             <h2 class="titulo">{{produto.nome}}</h2>
             <p>{{produto.descricao}}</p>
@@ -33,25 +37,25 @@ export default {
   data() {
     return {
       produtos: null,
-      produtosPorPagina: 9,
+      produtosPorPagina: 0,
       produtosTotal: 0
     };
   },
   computed: {
     url() {
       const query = serialize(this.$route.query);
-      return `/produto?_limit=${this.produtosPorPagina}${query}`;
+      // return `/search?_limit=${this.produtosPorPagina}${query}`;
+      return `/search?${query}`;
     }
   },
   methods: {
     getProdutos() {
       this.produtos = null;
-      window.setTimeout(() => {
-        api.get(this.url).then(response => {
-          this.produtosTotal = Number(response.headers["x-total-count"]);
-          this.produtos = response.data;
-        });
-      }, 1500);
+      api.get(this.url).then(response => {
+        this.produtosPorPagina = response.data.data.per_page;
+        this.produtosTotal = response.data.data.total;
+        this.produtos = response.data.data.data;
+      });
     }
   },
   watch: {
@@ -76,6 +80,14 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 30px;
   margin: 30px;
+}
+
+@media screen and (max-width: 500px) {
+  .produtos {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    margin: 10px;
+  }
 }
 
 .produto {

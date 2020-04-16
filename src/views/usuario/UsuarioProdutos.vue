@@ -4,7 +4,7 @@
     <ProdutoAdicionar />
     <h2>Seus Produtos</h2>
     <transition-group v-if="usuario_produtos" name="list" tag="ul">
-      <li v-for="(produto, index) in usuario_produtos" :key="index">
+      <li v-for="produto in usuario_produtos" :key="produto.id">
         <ProdutoItem :produto="produto">
           <p>{{produto.descricao}}</p>
           <button class="deletar" @click="deletarProduto(produto.id)">Deletar</button>
@@ -34,14 +34,9 @@ export default {
     deletarProduto(id) {
       const confirmar = window.confirm("Deseja remover este produto?");
       if (confirmar)
-        api
-          .delete(`/produto/${id}`)
-          .then(() => {
-            this.getUsuarioProdutos();
-          })
-          .catch(error => {
-            console.log(error.response);
-          });
+        api.delete(`/products/${id}`).then(() => {
+          this.getUsuarioProdutos();
+        });
     }
   },
   watch: {
@@ -51,6 +46,8 @@ export default {
   },
   created() {
     if (this.login) this.getUsuarioProdutos();
+
+    document.title = "Usuário";
   }
 };
 </script>

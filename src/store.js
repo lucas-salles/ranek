@@ -12,7 +12,7 @@ export default new Vuex.Store({
       id: '',
       nome: '',
       email: '',
-      senha: '',
+      password: '',
       cep: '',
       rua: '',
       numero: '',
@@ -38,28 +38,36 @@ export default new Vuex.Store({
   },
   actions: {
     getUsuarioProdutos(context) {
-      api.get(`/produto?usuario_id=${context.state.usuario.id}`)
+      return api.get(`/products`)
         .then(response => {
-          context.commit("UPDATE_USUARIO_PRODUTOS", response.data)
+          context.commit("UPDATE_USUARIO_PRODUTOS", response.data.data)
         })
     },
-    getUsuario(context, payload) {
-      return api.get(`/usuario/${payload}`)
+    getUsuario(context) {
+      return api.get(`/users`)
         .then(response => {
           context.commit('UPDATE_USUARIO', response.data)
           context.commit('UPDATE_LOGIN', true)
         })
     },
     criarUsuario(context, payload) {
-      context.commit("UPDATE_USUARIO", { id: payload.email })
-      return api.post("/usuario", payload)
+      return api.post("/users", payload)
+    },
+    logarUsuario(context, payload) {
+      return api.login({
+        email: payload.email,
+        password: payload.password
+      })
+        .then(response => {
+          window.localStorage.token = `Bearer ${response.data.access_token}`
+        })
     },
     deslogarUsuario(context) {
       context.commit("UPDATE_USUARIO", {
         id: '',
         nome: '',
         email: '',
-        senha: '',
+        password: '',
         cep: '',
         rua: '',
         numero: '',
@@ -67,6 +75,7 @@ export default new Vuex.Store({
         cidade: '',
         estado: ''
       })
+      window.localStorage.removeItem("token")
       context.commit("UPDATE_LOGIN", false)
     }
   }

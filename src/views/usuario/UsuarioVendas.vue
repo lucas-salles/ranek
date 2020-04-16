@@ -2,11 +2,11 @@
   <section>
     <div v-if="vendas">
       <h2>Vendas</h2>
-      <div class="produtos-wrapper" v-for="(venda, index) in vendas" :key="index">
-        <ProdutoItem v-if="venda.produto" :produto="venda.produto">
+      <div class="produtos-wrapper" v-for="venda in vendas" :key="venda.id">
+        <ProdutoItem v-if="venda.product" :produto="venda.product">
           <p class="vendedor">
             <span>Comprador:</span>
-            {{venda.comprador_id}}
+            {{venda.comprador.email}}
           </p>
         </ProdutoItem>
         <div class="entrega">
@@ -17,6 +17,7 @@
         </div>
       </div>
     </div>
+    <PaginaCarregando v-else />
   </section>
 </template>
 
@@ -40,8 +41,8 @@ export default {
   },
   methods: {
     getVendas() {
-      api.get(`/transacao?vendedor_id=${this.usuario.id}`).then(response => {
-        this.vendas = response.data;
+      api.get(`/transactions?tipo=vendedor`).then(response => {
+        this.vendas = response.data.data.data;
       });
     }
   },
@@ -52,6 +53,8 @@ export default {
   },
   created() {
     if (this.login) this.getVendas();
+
+    document.title = "Usuário | Vendas";
   }
 };
 </script>
@@ -79,5 +82,16 @@ h2 {
 h3 {
   margin: 0px;
   justify-self: end;
+}
+
+@media screen and (max-width: 500px) {
+  .entrega {
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+  }
+
+  h3 {
+    justify-self: start;
+  }
 }
 </style>
