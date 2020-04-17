@@ -83,6 +83,7 @@ export default {
       this.produto.nome = "";
       this.produto.preco = "";
       this.produto.descricao = "";
+      this.$refs.fotos.value = "";
     }
   }
 };
